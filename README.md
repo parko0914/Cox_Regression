@@ -2,6 +2,19 @@
 유방암 여부와 메트포민, 진통제 투여 정도와의 상관관계를 파악하기 위한 연구 논문 (분석 보조원으로 참여)
 
 ```r
+### 유방암 환자 추출
+
+brca <- c("C50","D05")
+
+t20.c <- as.list(NA)
+t20.c <- t20 %>% filter(substr(MAIN_SICK,1,3) %in% brca) %>% arrange(PERSON_ID, RECU_FR_DT)
+length(unique(t20.c$PERSON_ID))     #4622
+
+save(list=ls(),file="E:/seo_woman/age추가_fin/t20(~100).RData")
+
+rm(list=ls())
+load("E:/seo_woman/age추가_fin//t20(~100).RData")
+
 # 정의 1. 1년 이내 3회 출현 - 외래(3876)
 t20.cout <- t20.c %>% filter(FORM_CD == 3) %>% select(PERSON_ID, RECU_FR_DT)
 t20.cout <- t20.cout %>% arrange(PERSON_ID, RECU_FR_DT)
@@ -50,4 +63,11 @@ length(unique(bc2$PERSON_ID))
 bc.final <- rbind(bc1, bc2) %>% 
   group_by(PERSON_ID) %>% 
   summarise(CANCER_DATE = min(CANCER_DATE))
+```
+
+
+## 2. 1:4 매칭
+```r
+
+
 ```

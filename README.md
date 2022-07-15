@@ -68,6 +68,40 @@ bc.final <- rbind(bc1, bc2) %>%
 
 ## 2. 1:4 매칭
 ```r
+### 일반인과 암환자 조인하여 매칭데이터 뽑기
+matching_df<-rbind(df_can, df_cont)
 
+if (!require(MatchIt)) install.packages('MatchIt')
+library(MatchIt)
+
+### 매칭하기 ################################
+### exact는 오류가 발생하여 nearest로 함 ######
+mat <- matchit(CANCER ~ firsty
+```
+
+## cox-Regression
+### 유방암 발생 여부와 발생까지의 기간을 종속변수로 고려하여 다양한 독립변수와의 상관관계를 파악
+```r
+table(df_d$CANCER)
+table(df_d$work)
+
+model1 <- coxph(Surv(duration, CANCER == 1) ~ work + AGE + income + 
+                  BMI + alcohol + exer + 
+                  CCI_CAT + nsaid, data = df_d)
+summary(model1)
+```
+
+## ggsurvplot
+### 누적 위험도에 관한 생존곡선 그래프를 일하는 여성과 일하지 않는 여성으로 나누어 작성
+```r
+# nonwork
+ggsurvplot(survfit(Surv(duration/365, CANCER == 1) ~ nsaid, data=df_nw), data = df_nw, pval=FALSE, conf.int = TRUE, xlab = "Year",
+           legend.labs = c("never", "non-regular", "regular"), legend.title = "Analgesics", linetype = "strata",
+           risk.table = TRUE, risk.table.col = "strata", fun = "cumhaz", vpval.coord = c(0.1, 1), xlim = c(2,12), ylim = c(0,0.4), break.time.by = 2) 
+
+# work
+ggsurvplot(survfit(Surv(duration/365, CANCER == 1) ~ nsaid, data=df_w), data = df_w, pval=FALSE, conf.int = TRUE, xlab = "Year",
+           legend.labs = c("never", "non-regular", "regular"), legend.title = "Analgesics", linetype = "strata",
+           risk.table = TRUE, risk.table.col = "strata", fun = "cumhaz", vpval.coord = c(0.1, 1), xlim = c(2,12), ylim = c(0,0.4), break.time.by = 2) 
 
 ```

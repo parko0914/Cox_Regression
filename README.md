@@ -76,11 +76,13 @@ library(MatchIt)
 
 ### 매칭하기 ################################
 ### exact는 오류가 발생하여 nearest로 함 ######
-mat <- matchit(CANCER ~ firsty
+mat <- matchit(CANCER ~ RESIDENCE + IPSN_TYPE_CD, data = matching_df, method = "nearest", 
+               exact = ~ RESIDENCE + IPSN_TYPE_CD, ratio = 4)
+m0<-match.data(mat)
 ```
 
 ## cox-Regression
-### 유방암 발생 여부와 발생까지의 기간을 종속변수로 고려하여 다양한 독립변수와의 상관관계를 파악
+유방암 발생 여부와 발생까지의 기간을 종속변수로 고려하여 다양한 독립변수와의 상관관계를 파악
 ```r
 table(df_d$CANCER)
 table(df_d$work)
@@ -92,7 +94,7 @@ summary(model1)
 ```
 
 ## ggsurvplot
-### 누적 위험도에 관한 생존곡선 그래프를 일하는 여성과 일하지 않는 여성으로 나누어 작성
+누적 위험도에 관한 생존곡선 그래프를 일하는 여성과 일하지 않는 여성으로 나누어 작성
 ```r
 # nonwork
 ggsurvplot(survfit(Surv(duration/365, CANCER == 1) ~ nsaid, data=df_nw), data = df_nw, pval=FALSE, conf.int = TRUE, xlab = "Year",

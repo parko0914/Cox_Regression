@@ -107,3 +107,4 @@ ggsurvplot(survfit(Surv(duration/365, CANCER == 1) ~ nsaid, data=df_w), data = d
            risk.table = TRUE, risk.table.col = "strata", fun = "cumhaz", vpval.coord = c(0.1, 1), xlim = c(2,12), ylim = c(0,0.4), break.time.by = 2) 
 
 ```
+![image](https://user-images.githubusercontent.com/91238910/179354172-03db5feb-08bf-4fc5-a396-f7326ec0ee61.png)
